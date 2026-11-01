@@ -1,0 +1,8 @@
+&spi20 {
+		status = "okay";
+		compatible = "nordic,nrf-spim";
+
+		imu {
+			compatible = "st,lsm6dsl"
+		}
+	}

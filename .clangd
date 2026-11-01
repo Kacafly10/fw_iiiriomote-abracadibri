@@ -1,0 +1,2 @@
+CompileFlags:
+  Remove: [-m*, -fno-reorder-functions, -fno-freestanding, -fno-printf]
