@@ -1,34 +1,58 @@
-#include <zephyr/kernel.h>
-#include <zephyr/drivers/spi.h>
-#include <zephyr/rtio/rtio.h>
 #include <zephyr/devicetree.h>
-
+#include <zephyr/drivers/spi.h>
+#include <zephyr/kernel.h>
+#include "hog.h"
+#include <zephyr/rtio/rtio.h>
 #include <zephyr/device.h>
 #include <zephyr/drivers/sensor.h>
 
 #define MY_SPI_NODE DT_NODELABEL(imu)
 
-static struct sensor_value accelX, accelY, accelZ;
-static struct sensor_value gyroX, gyroY, gyroZ;
+#define GYRO_X_CAL 0
+#define GYRO_Y_CAL 0
+#define GYRO_Z_CAL 0
+#define ACCEL_X_CAL 0
+#define ACCEL_Y_CAL 0
+#define ACCEL_Z_CAL 0
 
-/* Define the iodev for the SPI device node */
-SPI_DT_IODEV_DEFINE(imu, MY_SPI_NODE, SPI_WORD_SET(8) | SPI_TRANSFER_MSB | SPI_MODE_CPOL | SPI_MODE_CPHA);
+struct values {
+    float traX;
+    float traY;
+    float traZ;
 
-/* Define an RTIO context with 4 SQE slots and 4 CQE slots */
-RTIO_DEFINE(spi_rtio_ctx, 4, 4);
+    float rotX;
+    float rotY;
+    float rotZ;
+};
 
 int main(void) {
-    struct rtio_sqe *sqe;
-    struct rtio_cqe *cqe;
-    int err;
 
-    sqe = rtio_sqe_acquire(&spi_rtio_ctx);
-    if (sqe == NULL) {
-        return -ENOMEM;
-    }
-    rtio_sqe_prep_transceive(sqe, &imu, RTIO_PRIO_NORM,
-                             tx_data, rx_data, sizeof(tx_data), NULL);
-    
-    sensor_stream_data_opt();
+
+  static struct sensor_value accelX, accelY, accelZ;
+  static struct sensor_value gyroX, gyroY, gyroZ;
+  
+  static struct values values;
+
+  const struct device *dev = DEVICE_DT_GET_ANY(st_lsm6dsl);
+
+  sensor_sample_fetch(dev);
+
+  sensor_channel_get(dev, SENSOR_CHAN_ACCEL_X, &accelX);
+  sensor_channel_get(dev, SENSOR_CHAN_ACCEL_Y, &accelY);
+  sensor_channel_get(dev, SENSOR_CHAN_ACCEL_Z, &accelZ);
+
+  sensor_channel_get(dev, SENSOR_CHAN_GYRO_X, &gyroX);
+  sensor_channel_get(dev, SENSOR_CHAN_GYRO_Y, &gyroY);
+  sensor_channel_get(dev, SENSOR_CHAN_GYRO_Z, &gyroZ);
+
+  values.traX = (float) accelX.val1 +  (float) accelX.val2 * 1000000 + ACCEL_X_CAL;
+  values.traY = (float) accelX.val1 +  (float) accelX.val2 * 1000000 + ACCEL_Y_CAL;
+  values.traZ = (float) accelX.val1 +  (float) accelX.val2 * 1000000 + ACCEL_Z_CAL;
+
+  values.rotX = (float) accelX.val1 +  (float) accelX.val2 * 1000000 + GYRO_X_CAL;
+  values.rotY = (float) accelX.val1 +  (float) accelX.val2 * 1000000 + GYRO_Y_CAL;
+  values.rotZ = (float) accelX.val1 +  (float) accelX.val2 * 1000000 + GYRO_Z_CAL;
+
+
+
 }
-
