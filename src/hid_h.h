@@ -1,4 +1,6 @@
-int reportMap[] = {
+#include <stdint.h>
+
+static const uint8_t reportMap[] = {
     0x05, 0x01, /* Usage Page (Generic Desktop Ctrls) */
 	0x09, 0x02, /* Usage (Mouse) */
 	0xA1, 0x01, /* Collection (Application) */
@@ -27,6 +29,8 @@ int reportMap[] = {
 	0xC0,       /*   End Collection */
 	0xC0,       /* End Collection */
 };
+
+void hids_init();
 
 void send_hid_report(int reportMap[], int plusX, int plusY, int highY);
 
