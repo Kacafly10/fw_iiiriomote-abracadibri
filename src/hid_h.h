@@ -1,3 +1,6 @@
+#ifndef HID_H_H_
+#define HID_H_H_
+
 #include <stdint.h>
 
 static const uint8_t reportMap[] = {
@@ -32,6 +35,5 @@ static const uint8_t reportMap[] = {
 
 void hids_init();
 
-void send_hid_report(int reportMap[], int plusX, int plusY, int highY);
-
-void recieve_hid_report(int reportMap[]);
+void send_hid_report(int plusX, int plusY, int highY);
+#endif

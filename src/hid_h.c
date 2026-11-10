@@ -1,34 +1,32 @@
 #include <zephyr/devicetree.h>
 #include <zephyr/device.h>
-#include <bluetooth/gatt_pool.h>
-#include <bluetooth/services/hogp.h>
+#include <bluetooth/conn_ctx.h>
 #include <bluetooth/services/hids.h>
 #include "hid_h.h"
 
+#define CONN_DEF()
+
+struct bt_hids hids_obj;
+struct bt_conn_ctx conn_ctx;
+
 void hids_init() {
-    struct bt_hids hids_obj;
-    struct bt_hids_init_param init_param;
+    struct bt_hids_init_param init_param = {0};
 
-    struct bt_hids_info info;
-    struct bt_hids_inp_rep inp_rep;
-    struct bt_hids_rep_map rep_map;
+    init_param.info.bcd_hid = 0x0111;
+    init_param.info.b_country_code = 0x00;
+    init_param.info.flags = BT_HIDS_REMOTE_WAKE | BT_HIDS_NORMALLY_CONNECTABLE | BT_HIDS_SCI_SUPPORTED;
 
-    info.bcd_hid = 0x0111;
-    info.b_country_code = 0x00;
+    init_param.inp_rep_group_init.reports[0].id = 1;
+    init_param.inp_rep_group_init.reports[0].size = 3;
 
-    inp_rep.id = 1;
-    inp_rep.size = 3;
-
-    rep_map.data = reportMap;
-    rep_map.size = sizeof(reportMap);
+    init_param.rep_map.data = reportMap;
+    init_param.rep_map.size = sizeof(reportMap);
     
-    init_param.info = info;
-    init_param.rep_map = rep_map;
     init_param.is_mouse = true;
 
     bt_hids_init(&hids_obj, &init_param);
 }
 
-void send_hid_report(int *reportMap, int plusX, int plusY, int highY) {
-
+void send_hid_report(int plusX, int plusY, int highY) {
+    bt_hids_inp_rep_send(hids_obj, struct bt_conn *conn, 0, const uint8_t *rep, uint8_t len, bt_gatt_complete_func_t cb);
 }
