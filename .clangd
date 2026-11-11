@@ -1,0 +1,12 @@
+CompileFlags:
+  # Remove flags that Clang doesn't support or throws errors on
+  Remove:
+    - -fno-printf-return-value
+    - -mfp16-format=*
+    - -fno-reorder-functions
+    - -specs=*
+
+  # Add missing definitions or force target adjustments if needed
+  Add:
+    - -DKERNEL
+    - -D__ZEPHYR__=1
