@@ -1,6 +1,4 @@
-#include <zephyr/devicetree.h>
 #include <zephyr/device.h>
-#include <bluetooth/conn_ctx.h>
 #include <bluetooth/services/hids.h>
 #include "hid_h.h"
 
@@ -27,6 +25,12 @@ void hids_init() {
     bt_hids_init(&hids_obj, &init_param);
 }
 
-void send_hid_report(int plusX, int plusY, int highY) {
-    bt_hids_inp_rep_send(hids_obj, struct bt_conn *conn, 0, const uint8_t *rep, uint8_t len, bt_gatt_complete_func_t cb);
+void send_hid_report(int pitch, int roll, int yaw, int plusX, int plusY, int highZ) {
+    uint8_t rep[] = {
+        0x01,
+    };
+
+    
+
+    bt_hids_inp_rep_send(&hids_obj, conn_ctx.conn, 0, rep, 3, NULL);
 }

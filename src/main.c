@@ -1,8 +1,7 @@
+#include <zephyr/kernel.h>
 #include <zephyr/device.h>
-#include <zephyr/devicetree.h>
 #include <zephyr/drivers/sensor.h>
 #include <zephyr/drivers/spi.h>
-#include <zephyr/kernel.h>
 #include "hid_h.h"
 
 #define IMU_SPI DT_NODELABEL(imu)
@@ -30,34 +29,37 @@ int main(void) {
 
   static struct values values;
 
-  const struct device *dev = DEVICE_DT_GET_ANY(st_lsm6dsl);
+  const struct device *dev = DEVICE_DT_GET(IMU_SPI);
+
+  if (!device_is_ready(dev)) { 
+    
+  }
 
   hids_init();
 
-  while
-    (true) {
-      sensor_sample_fetch(dev);
+  while (true) {
+    sensor_sample_fetch(dev);
 
-      sensor_channel_get(dev, SENSOR_CHAN_ACCEL_X, &accelX);
-      sensor_channel_get(dev, SENSOR_CHAN_ACCEL_Y, &accelY);
-      sensor_channel_get(dev, SENSOR_CHAN_ACCEL_Z, &accelZ);
+    sensor_channel_get(dev, SENSOR_CHAN_ACCEL_X, &accelX);
+    sensor_channel_get(dev, SENSOR_CHAN_ACCEL_Y, &accelY);
+    sensor_channel_get(dev, SENSOR_CHAN_ACCEL_Z, &accelZ);
 
-      sensor_channel_get(dev, SENSOR_CHAN_GYRO_X, &gyroX);
-      sensor_channel_get(dev, SENSOR_CHAN_GYRO_Y, &gyroY);
-      sensor_channel_get(dev, SENSOR_CHAN_GYRO_Z, &gyroZ);
+    sensor_channel_get(dev, SENSOR_CHAN_GYRO_X, &gyroX);
+    sensor_channel_get(dev, SENSOR_CHAN_GYRO_Y, &gyroY);
+    sensor_channel_get(dev, SENSOR_CHAN_GYRO_Z, &gyroZ);
 
-      values.traX =
-          (float)accelX.val1 + (float)accelX.val2 * 1000000 + ACCEL_X_CAL;
-      values.traY =
-          (float)accelX.val1 + (float)accelX.val2 * 1000000 + ACCEL_Y_CAL;
-      values.traZ =
-          (float)accelX.val1 + (float)accelX.val2 * 1000000 + ACCEL_Z_CAL;
+    values.traX =
+        (float)accelX.val1 + (float)accelX.val2 * 1000000 + ACCEL_X_CAL;
+    values.traY =
+        (float)accelX.val1 + (float)accelX.val2 * 1000000 + ACCEL_Y_CAL;
+    values.traZ =
+        (float)accelX.val1 + (float)accelX.val2 * 1000000 + ACCEL_Z_CAL;
 
-      values.rotX =
-          (float)accelX.val1 + (float)accelX.val2 * 1000000 + GYRO_X_CAL;
-      values.rotY =
-          (float)accelX.val1 + (float)accelX.val2 * 1000000 + GYRO_Y_CAL;
-      values.rotZ =
-          (float)accelX.val1 + (float)accelX.val2 * 1000000 + GYRO_Z_CAL;
-    }
+    values.rotX =
+        (float)accelX.val1 + (float)accelX.val2 * 1000000 + GYRO_X_CAL;
+    values.rotY =
+        (float)accelX.val1 + (float)accelX.val2 * 1000000 + GYRO_Y_CAL;
+    values.rotZ =
+        (float)accelX.val1 + (float)accelX.val2 * 1000000 + GYRO_Z_CAL;
+  }
 }

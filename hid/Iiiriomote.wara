@@ -1,0 +1,10 @@
+[[applicationCollection]]
+usage = ['Generic Desktop', 'Mouse']
+
+    [[applicationCollection.inputReport]]
+
+        [[applicationCollection.inputReport.variableItem]]
+        usage = ['Generic Desktop', 'Pointer']
+
+
+
