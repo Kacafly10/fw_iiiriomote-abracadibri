@@ -35,5 +35,5 @@ static const uint8_t reportMap[] = {
 
 void hids_init();
 
-void send_hid_report(int plusX, int plusY, int highY);
+void send_hid_report(int pitch, int roll, int yaw, int plusX, int plusY, int highY);
 #endif

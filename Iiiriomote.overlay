@@ -9,6 +9,7 @@
 	cs-gpios = <&gpio2 5 GPIO_ACTIVE_HIGH>;
 
 	imu: imu@0 {
+		status = "okay";
 		compatible = "st,lsm6dsl";
 		reg = <0>;
         	spi-max-frequency = <DT_FREQ_M(8)>;
