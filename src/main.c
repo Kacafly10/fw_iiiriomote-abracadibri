@@ -2,9 +2,11 @@
 #include <zephyr/device.h>
 #include <zephyr/drivers/sensor.h>
 #include <zephyr/drivers/spi.h>
+#include <zephyr/drivers/gpio.h>
 #include "hid_h.h"
 
 #define IMU_SPI DT_NODELABEL(imu)
+#define BUTTON0_NODE DT_ALIAS(shoulder)
 
 #define GYRO_X_CAL 0
 #define GYRO_Y_CAL 0
@@ -13,9 +15,12 @@
 #define ACCEL_Y_CAL 0
 #define ACCEL_Z_CAL 0
 
+static const struct gpio_dt_spec shoulder = GPIO_DT_SPEC_GET(BUTTON0_NODE, gpios);
+
 int main(void) {
   static struct sensor_value accelX, accelY, accelZ;
   static struct sensor_value gyroX, gyroY, gyroZ;
+  int shoulderReading;
 
   static struct values values;
 
@@ -37,6 +42,8 @@ int main(void) {
     sensor_channel_get(dev, SENSOR_CHAN_GYRO_X, &gyroX);
     sensor_channel_get(dev, SENSOR_CHAN_GYRO_Y, &gyroY);
     sensor_channel_get(dev, SENSOR_CHAN_GYRO_Z, &gyroZ);
+
+    shoulderReading = gpio_pin_configure_dt(&shoulder, GPIO_INPUT);
 
     values.traX =
         (float)accelX.val1 + (float)accelX.val2 * 1000000 + ACCEL_X_CAL;

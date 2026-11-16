@@ -2,6 +2,20 @@
 	status = "okay";
 };
 
+/ {
+	aliases {
+		shoulder = &shoulder;
+	};
+
+	buttons: buttons {
+		compatible = "gpio-keys";
+		shoulder: button_0 {
+			gpios = <&gpio2 2 GPIO_ACTIVE_LOW>;
+			label = "Shoulder (or like, neck) button.";
+		};
+	};
+};
+
 &spi00 {
 	status = "okay";
 	pinctrl-0 = <&spi00_default>;
@@ -12,7 +26,7 @@
 		status = "okay";
 		compatible = "st,lsm6dsl";
 		reg = <0>;
-        	spi-max-frequency = <DT_FREQ_M(8)>;
+		spi-max-frequency = <DT_FREQ_M(8)>;
 	};
 };
 
