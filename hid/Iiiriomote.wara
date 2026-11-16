@@ -19,19 +19,15 @@ usage = ['Generic Desktop', 'Mouse']
             logicalValueRange = [-32767, 32767]
 
             [[applicationCollection.inputReport.physicalCollection.variableItem]]
-            usage = ['Generic Desktop', 'Qx']
+            usage = ['Generic Desktop', 'Rx']
             logicalValueRange = [-32767, 32767]
 
             [[applicationCollection.inputReport.physicalCollection.variableItem]]
-            usage = ['Generic Desktop', 'Qy']
+            usage = ['Generic Desktop', 'Ry']
             logicalValueRange = [-32767, 32767]
 
             [[applicationCollection.inputReport.physicalCollection.variableItem]]
-            usage = ['Generic Desktop', 'Qz']
-            logicalValueRange = [-32767, 32767]
-
-            [[applicationCollection.inputReport.physicalCollection.variableItem]]
-            usage = ['Generic Desktop', 'Qw']
+            usage = ['Generic Desktop', 'Rz']
             logicalValueRange = [-32767, 32767]
 
             [[applicationCollection.inputReport.physicalCollection.variableItem]]

@@ -13,16 +13,6 @@
 #define ACCEL_Y_CAL 0
 #define ACCEL_Z_CAL 0
 
-struct values {
-  float traX;
-  float traY;
-  float traZ;
-
-  float rotX;
-  float rotY;
-  float rotZ;
-};
-
 int main(void) {
   static struct sensor_value accelX, accelY, accelZ;
   static struct sensor_value gyroX, gyroY, gyroZ;
@@ -61,5 +51,7 @@ int main(void) {
         (float)accelX.val1 + (float)accelX.val2 * 1000000 + GYRO_Y_CAL;
     values.rotZ =
         (float)accelX.val1 + (float)accelX.val2 * 1000000 + GYRO_Z_CAL;
+
+    send_hid_report(values);
   }
 }

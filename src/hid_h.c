@@ -8,8 +8,7 @@
 struct bt_hids hids_obj;
 struct bt_conn_ctx conn_ctx;
 
-void hids_init()
-{
+void hids_init() {
     struct bt_hids_init_param init_param = {0};
 
     init_param.info.bcd_hid = 0x0111;
@@ -19,19 +18,25 @@ void hids_init()
     init_param.inp_rep_group_init.reports[0].id = 1;
     init_param.inp_rep_group_init.reports[0].size = 3;
 
-    init_param.rep_map.data = reportMap;
-    init_param.rep_map.size = sizeof(reportMap);
-
+    init_param.rep_map.data = hidReportDescriptor;
+    init_param.rep_map.size = sizeof(hidReportDescriptor);
+    
     init_param.is_mouse = true;
 
     bt_hids_init(&hids_obj, &init_param);
 }
 
-void send_hid_report(int pitch, int roll, int yaw, int plusX, int plusY, int highZ)
-{
-    uint8_t rep[] = {
-        0x01,
-    };
+void send_hid_report(struct values values) {
+    uint8_t rep[9];
+    
+    rep[0] = 0x01;
+    rep[1] = values.traX;
+    rep[2] = values.traY;
+    rep[3] = values.traZ;
+    rep[4] = values.rotX;
+    rep[5] = values.rotY;
+    rep[6] = values.rotZ;
+    rep[8] = values.button;
 
     bt_hids_inp_rep_send(&hids_obj, conn_ctx.conn, 0, rep, 3, NULL);
 }

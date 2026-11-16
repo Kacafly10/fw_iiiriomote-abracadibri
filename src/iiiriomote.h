@@ -67,8 +67,10 @@ static const uint8_t hidReportDescriptor[] =
 #define HID_REPORT_INPUT1_ID (1)
 struct HidReportInput1
 {
-    uint8_t ReportId = HID_REPORT_INPUT1_ID;
+    uint8_t ReportId;
     uint8_t Payload[16];
 };
+
+struct HidReportInput1 HidReportInput1 = {.ReportId = HID_REPORT_INPUT1_ID};
 
 #pragma pack(pop)
